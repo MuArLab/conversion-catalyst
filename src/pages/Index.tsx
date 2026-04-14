@@ -247,8 +247,8 @@ export default function Index() {
                   ⏰ عرض لفترة محدودة
                 </span>
                 <div className="space-y-1">
-                  <p className="text-sm text-muted-foreground line-through">199 ر.س</p>
-                  <p className="text-4xl font-black text-primary">99 ر.س</p>
+                  {/* <p className="text-sm text-muted-foreground line-through">199 ر.س</p> */}
+                  <p className="text-4xl font-black text-primary">175 دينار</p>
                   <p className="text-sm text-muted-foreground">شامل الشحن المجاني</p>
                 </div>
                 <div className="flex flex-wrap justify-center gap-3 text-xs text-muted-foreground">
@@ -406,7 +406,7 @@ export default function Index() {
               لا تدع الحرارة تسيطر على سيارتك! 🚗
             </h2>
             <p className="text-muted-foreground mt-3 max-w-lg mx-auto">
-              اطلب مظلة BrellaShield الآن واستمتع بسيارة باردة كل يوم.
+              اطلب مظلة  الآن واستمتع بسيارة باردة كل يوم.
             </p>
             <div className="mt-6">
               <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-10 py-6 rounded-xl shadow-lg" asChild>
@@ -428,7 +428,7 @@ export default function Index() {
       <div className="fixed bottom-0 inset-x-0 z-50 p-3 bg-card/95 backdrop-blur-sm border-t border-border md:hidden">
         <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 text-base py-5 rounded-xl shadow-lg" asChild>
           <a href="#order-form">
-            اطلب الآن — 99 ر.س فقط
+            اطلب الآن — 175 دينار فقط
           </a>
         </Button>
       </div>
