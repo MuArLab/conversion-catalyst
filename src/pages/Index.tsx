@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
 import {
   ShieldCheck, Thermometer, Clock, Car, Umbrella, Package,
@@ -14,8 +14,8 @@ import productDimensions from "@/assets/product-dimensions.jpg";
 import productBox from "@/assets/product-box.jpg";
 import productAd from "@/assets/product-ad.png";
 
-const WHATSAPP_NUMBER = "966500000000";
-const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("مرحباً، أرغب بطلب مظلة BrellaShield")}`;
+const GOOGLE_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbxNGlwy4YMrLN4Oodey9t9-Zcm-snuqw8xwsGKInCw8PVVxNqXfk89TZT98L4CGpcWm/exec";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -52,14 +52,105 @@ function SectionTitle({ children, sub }: { children: React.ReactNode; sub?: stri
 }
 
 export default function Index() {
-  const benefits = [
-    { icon: <Thermometer className="h-7 w-7" />, title: "تخفيض الحرارة", desc: "يقلل درجة حرارة السيارة الداخلية بشكل ملحوظ" },
-    { icon: <ShieldCheck className="h-7 w-7" />, title: "حماية من الأشعة", desc: "يعكس 99% من الأشعة فوق البنفسجية الضارة" },
-    { icon: <Zap className="h-7 w-7" />, title: "سريع الاستخدام", desc: "يفتح مثل المظلة في ثوانٍ معدودة" },
-    { icon: <Package className="h-7 w-7" />, title: "مدمج وسهل التخزين", desc: "يُطوى بحجم صغير يناسب درج القفازات" },
-    { icon: <Car className="h-7 w-7" />, title: "يناسب جميع السيارات", desc: "مقاس عالمي 57×31 بوصة (145×79 سم)" },
-    { icon: <Eye className="h-7 w-7" />, title: "يحمي الداخلية", desc: "يحافظ على تابلوه السيارة والمقاعد من التشقق" },
-  ];
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<{
+    name?: string;
+    phone?: string;
+    city?: string;
+    quantity?: string;
+  }>({});
+  const [submitMessage, setSubmitMessage] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
+
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitMessage(null);
+    setFieldErrors({});
+
+    const form = e.currentTarget;
+    const rawFormData = new FormData(form);
+
+    const name = String(rawFormData.get("name") ?? "").trim();
+    const phone = String(rawFormData.get("phone") ?? "").trim();
+    const city = String(rawFormData.get("city") ?? "").trim();
+    const quantityRaw = String(rawFormData.get("quantity") ?? "").trim();
+    const quantity = Number(quantityRaw);
+
+    const errors: {
+      name?: string;
+      phone?: string;
+      city?: string;
+      quantity?: string;
+    } = {};
+
+    if (name.length < 2) {
+      errors.name = "الاسم لازم يكون واضح (حرفين على الأقل).";
+    }
+
+    if (!/^[0-9+()\-\s]{7,20}$/.test(phone)) {
+      errors.phone = "رقم الهاتف غير صحيح.";
+    }
+
+    if (city.length < 2) {
+      errors.city = "اكتب اسم مدينة صحيح.";
+    }
+
+    if (!Number.isInteger(quantity) || quantity < 1 || quantity > 99) {
+      errors.quantity = "الكمية لازم تكون من 1 إلى 99.";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      setSubmitMessage({
+        type: "error",
+        text: "راجع البيانات قبل الإرسال.",
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("phone", phone);
+    formData.append("city", city);
+    formData.append("quantity", String(quantity));
+    formData.append("product", "BrellaShield");
+
+    try {
+      const request = fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        body: formData,
+      });
+
+      await Promise.race([
+        request,
+        new Promise((resolve) => setTimeout(resolve, 1800)),
+      ]);
+
+      setSubmitMessage({
+        type: "success",
+        text: "تم إرسال الطلب بنجاح، بنواصلوا معاك قريب.",
+      });
+
+      form.reset();
+      const quantityInput = form.elements.namedItem("quantity") as HTMLInputElement | null;
+      if (quantityInput) {
+        quantityInput.value = "1";
+      }
+    } catch (error) {
+      console.error("Error sending order:", error);
+      setSubmitMessage({
+        type: "error",
+        text: "صار خطأ أثناء إرسال الطلب، حاول مرة ثانية.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const features = [
     "طبقة فضية عاكسة للحرارة وأشعة الشمس",
@@ -89,106 +180,21 @@ export default function Index() {
   const images = [
     { src: heroImg, alt: "مظلة BrellaShield مركبة على سيارة" },
     { src: productFrontBack, alt: "الوجه الأمامي والخلفي للمظلة" },
-    { src: productDimensions, alt: "أبعاد المظلة" },
     { src: productBox, alt: "علبة المنتج" },
-    { src: productAd, alt: "إعلان المنتج" },
   ];
 
   return (
     <div className="min-h-screen bg-background">
       {/* HERO */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-accent to-background">
-        <div className="container mx-auto px-4 py-12 md:py-20">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <motion.div initial="hidden" animate="visible" variants={stagger} className="space-y-6">
-              <motion.div variants={fadeUp}>
-                <span className="inline-block bg-secondary text-secondary-foreground text-xs font-bold px-3 py-1 rounded-full mb-3">
-                  🔥 عرض محدود
-                </span>
-                <h1 className="text-3xl md:text-5xl font-black leading-tight text-foreground">
-                  ابقَ بارداً.<br />
-                  <span className="text-primary">ظل ذكي لسيارتك.</span>
-                </h1>
-              </motion.div>
-              <motion.p variants={fadeUp} className="text-lg text-muted-foreground leading-relaxed">
-                مظلة الزجاج الأمامي المدمجة التي تفتح بسرعة مثل المظلة — تناسب جميع السيارات وتخزينها سهل جداً.
-              </motion.p>
-              <motion.div variants={fadeUp} className="flex flex-wrap gap-3">
-                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-8 py-6 rounded-xl shadow-lg" asChild>
-                  <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-                    <MessageCircle className="h-5 w-5 ml-2" />
-                    اطلب الآن عبر واتساب
-                  </a>
-                </Button>
-              </motion.div>
-              <motion.div variants={fadeUp} className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-                <span className="flex items-center gap-1"><Truck className="h-4 w-4 text-primary" /> شحن مجاني</span>
-                <span className="flex items-center gap-1"><ShieldCheck className="h-4 w-4 text-primary" /> الدفع عند الاستلام</span>
-                <span className="flex items-center gap-1"><RotateCcw className="h-4 w-4 text-primary" /> إرجاع خلال 7 أيام</span>
-              </motion.div>
-            </motion.div>
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6 }}>
-              <img src={heroImg} alt="BrellaShield مظلة السيارة" className="w-full rounded-2xl shadow-2xl" loading="eager" />
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* PROBLEM → SOLUTION */}
-      <section className="py-16 md:py-20 bg-card">
-        <div className="container mx-auto px-4">
-          <SectionTitle sub="هل تعاني من هذه المشاكل؟">المشكلة والحل</SectionTitle>
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
-              <Card className="border-destructive/20 bg-destructive/5 h-full">
-                <CardContent className="p-6 space-y-3">
-                  <Sun className="h-10 w-10 text-destructive" />
-                  <h3 className="text-xl font-bold text-foreground">😤 المشكلة</h3>
-                  <ul className="space-y-2 text-muted-foreground">
-                    <li>• سيارتك تتحول لفرن في الصيف</li>
-                    <li>• المقود والتابلوه حارقين لا يُلمسون</li>
-                    <li>• الجلسات تتشقق من حرارة الشمس</li>
-                    <li>• الواقيات التقليدية كبيرة وصعبة التخزين</li>
-                  </ul>
-                </CardContent>
-              </Card>
-            </motion.div>
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
-              <Card className="border-primary/20 bg-accent h-full">
-                <CardContent className="p-6 space-y-3">
-                  <Umbrella className="h-10 w-10 text-primary" />
-                  <h3 className="text-xl font-bold text-foreground">✅ الحل: BrellaShield</h3>
-                  <ul className="space-y-2 text-muted-foreground">
-                    <li>• تفتح مثل المظلة في 3 ثوانٍ</li>
-                    <li>• تعكس 99% من الأشعة فوق البنفسجية</li>
-                    <li>• تخزينها في درج القفازات</li>
-                    <li>• تناسب جميع أنواع السيارات</li>
-                  </ul>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* BENEFITS */}
-      <section className="py-16 md:py-20">
-        <div className="container mx-auto px-4">
-          <SectionTitle sub="لماذا تختار BrellaShield؟">المزايا</SectionTitle>
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {benefits.map((b, i) => (
-              <motion.div key={i} variants={fadeUp}>
-                <Card className="h-full hover:shadow-lg transition-shadow">
-                  <CardContent className="p-6 text-center space-y-3">
-                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-accent text-primary">
-                      {b.icon}
-                    </div>
-                    <h3 className="font-bold text-foreground">{b.title}</h3>
-                    <p className="text-sm text-muted-foreground">{b.desc}</p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+      <section className="relative overflow-hidden">
+        <div className="w-full p-0 m-0">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+            className="w-full"
+          >
+            <img src={productAd} alt="BrellaShield إعلان المنتج" className="block w-full h-auto" loading="eager" />
           </motion.div>
         </div>
       </section>
@@ -218,7 +224,6 @@ export default function Index() {
       {/* IMAGE GALLERY */}
       <section className="py-16 md:py-20">
         <div className="container mx-auto px-4">
-          <SectionTitle>صور المنتج</SectionTitle>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-5xl mx-auto">
             {images.map((img, i) => (
               <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
@@ -230,29 +235,6 @@ export default function Index() {
         </div>
       </section>
 
-      {/* SOCIAL PROOF */}
-      <section className="py-16 md:py-20 bg-card">
-        <div className="container mx-auto px-4">
-          <SectionTitle sub="آراء عملائنا">تقييمات العملاء</SectionTitle>
-          <div className="grid sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            {reviews.map((r, i) => (
-              <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
-                <Card className="h-full">
-                  <CardContent className="p-6 space-y-3">
-                    <div className="flex gap-0.5">
-                      {Array.from({ length: r.rating }).map((_, j) => (
-                        <Star key={j} className="h-4 w-4 fill-secondary text-secondary" />
-                      ))}
-                    </div>
-                    <p className="text-sm text-muted-foreground italic">"{r.text}"</p>
-                    <p className="text-sm font-bold text-foreground">— {r.name}</p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* PRICING / OFFER */}
       <section className="py-16 md:py-20">
@@ -275,8 +257,7 @@ export default function Index() {
                   <span className="flex items-center gap-1"><RotateCcw className="h-3 w-3" /> ضمان إرجاع</span>
                 </div>
                 <Button size="lg" className="w-full bg-primary text-primary-foreground hover:bg-primary/90 text-lg py-6 rounded-xl shadow-lg" asChild>
-                  <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-                    <MessageCircle className="h-5 w-5 ml-2" />
+                  <a href="#order-form">
                     اطلب الآن
                   </a>
                 </Button>
@@ -284,6 +265,124 @@ export default function Index() {
               </CardContent>
             </Card>
           </motion.div>
+        </div>
+      </section>
+
+      {/* ORDER FORM */}
+      <section id="order-form" className="py-16 md:py-20 bg-card scroll-mt-24" dir="rtl">
+        <div className="container mx-auto px-4">
+          <SectionTitle sub="عبّي البيانات ونرسل طلبك مباشرة للفريق">اطلب المنتج بكل سهولة</SectionTitle>
+          <div className="grid items-start gap-6 lg:grid-cols-2 max-w-5xl mx-auto">
+            <Card className="border-border bg-background shadow-sm">
+              <CardContent className="p-6 md:p-8">
+                <form dir="rtl" onSubmit={onSubmit} className="grid gap-5 md:grid-cols-2" noValidate>
+                  <label className="block text-sm font-medium text-foreground md:col-span-1">
+                    الاسم الكامل
+                    <input
+                      type="text"
+                      name="name"
+                      placeholder="اكتب اسمك الكامل"
+                      className="mt-2 w-full rounded-xl border border-input bg-background px-4 py-3 text-right text-base text-foreground placeholder:text-muted-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/25"
+                      required
+                    />
+                    {fieldErrors.name ? <p className="mt-1 text-xs text-destructive">{fieldErrors.name}</p> : null}
+                  </label>
+
+                  <label className="block text-sm font-medium text-foreground md:col-span-1">
+                    رقم الهاتف
+                    <input
+                      type="tel"
+                      name="phone"
+                      placeholder="اكتب رقم هاتفك"
+                      className="mt-2 w-full rounded-xl border border-input bg-background px-4 py-3 text-right text-base text-foreground placeholder:text-muted-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/25"
+                      required
+                    />
+                    {fieldErrors.phone ? <p className="mt-1 text-xs text-destructive">{fieldErrors.phone}</p> : null}
+                  </label>
+
+                  <label className="block text-sm font-medium text-foreground md:col-span-1">
+                    المدينة
+                    <input
+                      type="text"
+                      name="city"
+                      placeholder="اكتب المدينة"
+                      className="mt-2 w-full rounded-xl border border-input bg-background px-4 py-3 text-right text-base text-foreground placeholder:text-muted-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/25"
+                      required
+                    />
+                    {fieldErrors.city ? <p className="mt-1 text-xs text-destructive">{fieldErrors.city}</p> : null}
+                  </label>
+
+                  <label className="block text-sm font-medium text-foreground md:col-span-1">
+                    الكمية
+                    <input
+                      type="number"
+                      name="quantity"
+                      min={1}
+                      max={99}
+                      step={1}
+                      defaultValue={1}
+                      placeholder="1"
+                      className="mt-2 w-full rounded-xl border border-input bg-background px-4 py-3 text-right text-base text-foreground placeholder:text-muted-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/25"
+                      required
+                    />
+                    {fieldErrors.quantity ? <p className="mt-1 text-xs text-destructive">{fieldErrors.quantity}</p> : null}
+                  </label>
+
+                  <div className="md:col-span-2">
+                    <Button
+                      type="submit"
+                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 text-lg py-6 rounded-xl shadow-lg"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? "جارٍ إرسال الطلب..." : "اطلب الآن"}
+                    </Button>
+                    {submitMessage ? (
+                      <p
+                        className={`mt-3 text-sm ${submitMessage.type === "success" ? "text-emerald-700" : "text-destructive"}`}
+                        role="status"
+                        aria-live="polite"
+                      >
+                        {submitMessage.text}
+                      </p>
+                    ) : null}
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
+
+            <Card className="border-border bg-background shadow-sm">
+              <CardContent className="p-5">
+                <div className="overflow-hidden rounded-xl border border-border">
+                  <img src={productAd} alt="صورة المنتج" className="h-auto w-full object-cover" loading="lazy" />
+                </div>
+                <p className="mt-2 text-sm leading-7 text-muted-foreground">صورة المنتج للمعاينة قبل إتمام الطلب.</p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+            {/* SOCIAL PROOF (moved to last) */}
+      <section className="py-16 md:py-20 bg-card">
+        <div className="container mx-auto px-4">
+          <SectionTitle sub="آراء عملائنا">تقييمات العملاء</SectionTitle>
+          <div className="grid sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            {reviews.map((r, i) => (
+              <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
+                <Card className="h-full">
+                  <CardContent className="p-6 space-y-3">
+                    <div className="flex gap-0.5">
+                      {Array.from({ length: r.rating }).map((_, j) => (
+                        <Star key={j} className="h-4 w-4 fill-secondary text-secondary" />
+                      ))}
+                    </div>
+                    <p className="text-sm text-muted-foreground italic">"{r.text}"</p>
+                    <p className="text-sm font-bold text-foreground">— {r.name}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -311,9 +410,8 @@ export default function Index() {
             </p>
             <div className="mt-6">
               <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-10 py-6 rounded-xl shadow-lg" asChild>
-                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-                  <MessageCircle className="h-5 w-5 ml-2" />
-                  اطلب الآن عبر واتساب
+                <a href="#order-form">
+                  اطلب الآن
                 </a>
               </Button>
             </div>
@@ -329,8 +427,7 @@ export default function Index() {
       {/* STICKY MOBILE CTA */}
       <div className="fixed bottom-0 inset-x-0 z-50 p-3 bg-card/95 backdrop-blur-sm border-t border-border md:hidden">
         <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 text-base py-5 rounded-xl shadow-lg" asChild>
-          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-            <MessageCircle className="h-5 w-5 ml-2" />
+          <a href="#order-form">
             اطلب الآن — 99 ر.س فقط
           </a>
         </Button>
