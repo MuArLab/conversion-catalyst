@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   ShieldCheck, Thermometer, Clock, Car, Umbrella, Package,
@@ -55,6 +56,7 @@ function SectionTitle({ children, sub }: { children: React.ReactNode; sub?: stri
 }
 
 export default function Index() {
+  const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<{
     name?: string;
@@ -120,7 +122,7 @@ export default function Index() {
     formData.append("phone", phone);
     formData.append("city", city);
     formData.append("quantity", String(quantity));
-    formData.append("product", "BrellaShield");
+    formData.append("product", "بروتين لاين مضاد للتجاعيد");
 
     try {
       const request = fetch(GOOGLE_SCRIPT_URL, {
@@ -134,16 +136,12 @@ export default function Index() {
         new Promise((resolve) => setTimeout(resolve, 1800)),
       ]);
 
-      setSubmitMessage({
-        type: "success",
-        text: "تم إرسال الطلب بنجاح، بنواصلوا معاك قريب.",
-      });
-
       form.reset();
       const quantityInput = form.elements.namedItem("quantity") as HTMLInputElement | null;
       if (quantityInput) {
         quantityInput.value = "1";
       }
+      navigate("/thankyou");
     } catch (error) {
       console.error("Error sending order:", error);
       setSubmitMessage({
