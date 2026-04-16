@@ -219,7 +219,7 @@ export default function Index() {
               </ul>
             </div>
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
-              <img src={img3} alt="أبعاد المنتج" className="w-full rounded-xl shadow-lg" loading="lazy" />
+              <img src={img3} alt="" className="w-full rounded-xl shadow-lg" loading="lazy" />
             </motion.div>
           </div>
         </div>
@@ -251,7 +251,7 @@ export default function Index() {
                   ⏰ عرض لفترة محدودة
                 </span>
                 <div className="space-y-1">
-                  <p className="text-sm text-muted-foreground line-through">299 دينار</p>
+                  <p className="text-sm text-muted-foreground line-through">249 دينار</p>
                   <p className="text-4xl font-black text-primary">199 دينار</p>
                   <p className="text-sm text-muted-foreground">شامل الشحن المجاني</p>
                 </div>
