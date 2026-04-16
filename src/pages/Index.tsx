@@ -8,11 +8,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
-import heroImg from "@/assets/product-car.png";
-import productFrontBack from "@/assets/product-front-back.jpg";
-import productDimensions from "@/assets/product-dimensions.jpg";
-import productBox from "@/assets/product-box.jpg";
-import productAd from "@/assets/product-ad.png";
+import heroImg from "@/assets/2v0AP_20251004130234609.png";
+import img2 from "@/assets/Gemini_Generated_Image_enj3sfenj3sfenj3.png";
+import img3 from "@/assets/71uaXX4fu1L._AC_SL1500_.jpg";
+import img4 from "@/assets/Gemini_Generated_Image_a2qoffa2qoffa2qo.png";
+import img5 from "@/assets/61AmCLtzVGL._AC_SY300_SX300_QL70_ML2_.jpg";
+import img6 from "@/assets/Gemini_Generated_Image_og3rwdog3rwdog3r.png";
+import img7 from "@/assets/Gemini_Generated_Image_wru5niwru5niwru5.png";
+import img8 from "@/assets/generated_image_3764020f-7a46-4e90-92b0-0fe61d54f710.png";
 
 const GOOGLE_SCRIPT_URL =
   "https://script.google.com/macros/s/AKfycbxNGlwy4YMrLN4Oodey9t9-Zcm-snuqw8xwsGKInCw8PVVxNqXfk89TZT98L4CGpcWm/exec";
@@ -153,33 +156,35 @@ export default function Index() {
   };
 
   const features = [
-    "طبقة فضية عاكسة للحرارة وأشعة الشمس",
-    "هيكل معدني قوي ومتين",
-    "مقبض مريح سهل الإمساك",
-    "مقاس 57 × 31 بوصة (145 × 79 سم)",
-    "وزن خفيف وسهل الحمل",
-    "يُفتح ويُغلق بضغطة واحدة",
-    "يأتي مع حقيبة تخزين",
+    "يعمل على رفع البشرة المترهلة وتحسين شكل تحديد الوجه",
+    "يساعد في تنعيم الخطوط الدقيقة والتجاعيد العميقة لجعل البشرة تبدو أكثر شباباً",
+    "يساهم في تقليص المسام الواسعة واستعادة مرونة الجلد",
+    "يتميز بتركيبة خفيفة وسهلة الامتصاص من قبل الجلد",
+    "بعيداً عن التأثير الفوري، فإن تغلغل الكولاجين والحرير يحفز الخلايا الليفية (Fibroblasts) لإنتاج كولاجين طبيعي جديد بمرور الوقت",
   ];
 
   const faqs = [
-    { q: "هل يناسب سيارتي؟", a: "نعم، المظلة بمقاس عالمي 57×31 بوصة تناسب معظم السيارات الصغيرة والمتوسطة والكبيرة." },
-    { q: "كيف يتم تركيبها؟", a: "ببساطة تفتحها مثل المظلة وتضعها على الزجاج الأمامي من الداخل. لا تحتاج أي أدوات." },
-    { q: "هل الشحن مجاني؟", a: "نعم، نوفر شحن مجاني لجميع المناطق داخل ليبيا." },
-    { q: "ما هي مدة التوصيل؟", a: "يتم التوصيل خلال 1-4 أيام عمل حسب منطقتك." },
-    { q: "هل الدفع عند الاستلام متاح؟", a: "نعم، نوفر خيار الدفع عند الاستلام (كاش أون ديليفري)." },
+    { q: "هل يناسب المنتج جميع أنواع البشرة؟", a: "نعم، تركيبة المنتج لطيفة ومناسبة لكل أنواع البشرة بما فيها الحساسة." },
+    { q: "متى تظهر النتائج؟", a: "يلاحظ معظم المستخدمين نتائج أولية من شد ونعومة بعد الاستخدام الأول، وتتحسن النتائج مع الاستمرار." },
+    { q: "هل يمكن استخدامه مع مستحضرات أخرى؟", a: "نعم، يمكن دمجه مع روتين العناية اليومي المعتاد دون مشاكل." },
+    { q: "كم مرة أستخدم المنتج؟", a: "يفضل استخدامه مرة إلى مرتين يومياً حسب الحاجة." },
+    { q: "هل يوجد توصيل لجميع المدن؟", a: "نعم، نوفر توصيل سريع وآمن لكل المدن داخل ليبيا." },
   ];
 
   const reviews = [
-    { name: "أحمد م.", rating: 5, text: "ممتازة جداً! سيارتي صارت باردة حتى في عز الصيف. أنصح الكل فيها." },
-    { name: "سارة ع.", rating: 5, text: "سهلة الاستخدام وحجمها صغير. أحسن من الواقيات التقليدية بمراحل." },
-    { name: "خالد ر.", rating: 4, text: "جودة ممتازة والتوصيل كان سريع. تستاهل  ." },
+    { name: "ليلى ص.", rating: 5, text: "المنتج فعلاً شد بشرتي من أول استخدام! لاحظت نعومة واختفاء خطوط صغيرة. أنصح به لكل من تهتم بجمالها." },
+    { name: "منى ب.", rating: 5, text: "امتصاصه سريع وما يترك أثر دهني. بشرتي صارت أنعم وأكثر إشراقاً بعد أسبوعين فقط." },
+    { name: "سالم ك.", rating: 4, text: "لاحظت تحسن في مرونة الجلد والمسام صغرت. التغليف ممتاز والتوصيل سريع." },
   ];
 
   const images = [
-    { src: heroImg, alt: "مظلة BrellaShield مركبة على سيارة" },
-    { src: productFrontBack, alt: "الوجه الأمامي والخلفي للمظلة" },
-    { src: productBox, alt: "علبة المنتج" },
+    { src: img2, alt: "صورة المنتج 2" },
+    // { src: img3, alt: "صورة المنتج 3" },
+    { src: img4, alt: "صورة المنتج 4" },
+    // { src: img5, alt: "صورة المنتج 5" },
+    { src: img6, alt: "صورة المنتج 6" },
+    { src: img7, alt: "صورة المنتج 7" },
+    { src: img8, alt: "صورة المنتج 8" },
   ];
 
   return (
@@ -193,7 +198,7 @@ export default function Index() {
             transition={{ duration: 0.6 }}
             className="w-full"
           >
-            <img src={productAd} alt="BrellaShield إعلان المنتج" className="block w-full h-auto" loading="eager" />
+            <img src={heroImg} alt="صورة المنتج الرئيسية" className="block w-full h-auto" loading="eager" />
           </motion.div>
         </div>
       </section>
@@ -214,7 +219,7 @@ export default function Index() {
               </ul>
             </div>
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
-              <img src={productDimensions} alt="أبعاد المظلة" className="w-full rounded-xl shadow-lg" loading="lazy" />
+              <img src={img3} alt="أبعاد المنتج" className="w-full rounded-xl shadow-lg" loading="lazy" />
             </motion.div>
           </div>
         </div>
@@ -246,8 +251,8 @@ export default function Index() {
                   ⏰ عرض لفترة محدودة
                 </span>
                 <div className="space-y-1">
-                  {/* <p className="text-sm text-muted-foreground line-through">199 ر.س</p> */}
-                  <p className="text-4xl font-black text-primary">175 دينار</p>
+                  <p className="text-sm text-muted-foreground line-through">299 دينار</p>
+                  <p className="text-4xl font-black text-primary">199 دينار</p>
                   <p className="text-sm text-muted-foreground">شامل الشحن المجاني</p>
                 </div>
                 <div className="flex flex-wrap justify-center gap-3 text-xs text-muted-foreground">
@@ -272,9 +277,21 @@ export default function Index() {
         <div className="container mx-auto px-4">
           <SectionTitle sub="عبّي البيانات ونرسل طلبك مباشرة للفريق">اطلب المنتج بكل سهولة</SectionTitle>
           <div className="grid items-start gap-6 lg:grid-cols-2 max-w-5xl mx-auto">
-            <Card className="border-border bg-background shadow-sm">
+            {/* Desktop: show image on the left, form on the right. Mobile: image above form (handled by CSS). */}
+            <div className="hidden lg:block">
+              <Card className="border-border bg-background shadow-sm h-full flex items-center justify-center">
+                <CardContent className="p-5 flex flex-col items-center justify-center">
+                  <div className="overflow-hidden rounded-2xl border border-border shadow-lg w-[350px] h-[350px] flex items-center justify-center bg-muted">
+                    <img src={heroImg} alt="صورة المنتج للمعاينة" className="object-contain w-full h-full" loading="lazy" />
+                  </div>
+                  <p className="mt-4 text-base leading-7 text-muted-foreground text-center">صورة المنتج للمعاينة قبل إتمام الطلب.</p>
+                </CardContent>
+              </Card>
+            </div>
+            <Card className="border-border bg-background shadow-sm w-full">
               <CardContent className="p-6 md:p-8">
                 <form dir="rtl" onSubmit={onSubmit} className="grid gap-5 md:grid-cols-2" noValidate>
+                  {/* ...existing code for form fields and button... */}
                   <label className="block text-sm font-medium text-foreground md:col-span-1">
                     الاسم الكامل
                     <input
@@ -348,15 +365,6 @@ export default function Index() {
                 </form>
               </CardContent>
             </Card>
-
-            <Card className="border-border bg-background shadow-sm">
-              <CardContent className="p-5">
-                <div className="overflow-hidden rounded-xl border border-border">
-                  <img src={productAd} alt="صورة المنتج" className="h-auto w-full object-cover" loading="lazy" />
-                </div>
-                <p className="mt-2 text-sm leading-7 text-muted-foreground">صورة المنتج للمعاينة قبل إتمام الطلب.</p>
-              </CardContent>
-            </Card>
           </div>
         </div>
       </section>
@@ -364,7 +372,7 @@ export default function Index() {
             {/* SOCIAL PROOF (moved to last) */}
       <section className="py-16 md:py-20 bg-card">
         <div className="container mx-auto px-4">
-          <SectionTitle sub="آراء عملائنا">تقييمات العملاء</SectionTitle>
+          <SectionTitle sub="آراء مستخدمي المنتج">تجارب العملاء</SectionTitle>
           <div className="grid sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {reviews.map((r, i) => (
               <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
@@ -388,7 +396,7 @@ export default function Index() {
       {/* FAQ */}
       <section className="py-16 md:py-20 bg-card">
         <div className="container mx-auto px-4">
-          <SectionTitle sub="إجابات لأكثر الأسئلة شيوعاً">الأسئلة الشائعة</SectionTitle>
+          <SectionTitle sub="كل ما تحتاج معرفته عن المنتج">الأسئلة الشائعة</SectionTitle>
           <div className="max-w-2xl mx-auto">
             {faqs.map((f, i) => (
               <FAQItem key={i} q={f.q} a={f.a} />
@@ -402,10 +410,10 @@ export default function Index() {
         <div className="container mx-auto px-4 text-center space-y-6">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
             <h2 className="text-2xl md:text-4xl font-black text-foreground">
-              لا تدع الحرارة تسيطر على سيارتك! 🚗
+              استعيدي شباب بشرتك ونعومتها الآن ✨
             </h2>
             <p className="text-muted-foreground mt-3 max-w-lg mx-auto">
-              اطلب مظلة  الآن واستمتع بسيارة باردة كل يوم.
+              اطلب المنتج اليوم وابدأي رحلة العناية ببشرة مشدودة وأكثر نضارة من أول استخدام.
             </p>
             <div className="mt-6">
               <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-10 py-6 rounded-xl shadow-lg" asChild>
