@@ -174,7 +174,7 @@ export default function Index() {
   const reviews = [
     { name: "ليلى ص.", rating: 5, text: "المنتج فعلاً شد بشرتي من أول استخدام! لاحظت نعومة واختفاء خطوط صغيرة. أنصح به لكل من تهتم بجمالها." },
     { name: "منى ب.", rating: 5, text: "امتصاصه سريع وما يترك أثر دهني. بشرتي صارت أنعم وأكثر إشراقاً بعد أسبوعين فقط." },
-    { name: "سالم ك.", rating: 4, text: "لاحظت تحسن في مرونة الجلد والمسام صغرت. التغليف ممتاز والتوصيل سريع." },
+    { name: "هبة ك.", rating: 4, text: "لاحظت تحسن في مرونة الجلد والمسام صغرت. التغليف ممتاز والتوصيل سريع." },
   ];
 
   const images = [
@@ -435,7 +435,7 @@ export default function Index() {
       <div className="fixed bottom-0 inset-x-0 z-50 p-3 bg-card/95 backdrop-blur-sm border-t border-border md:hidden">
         <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 text-base py-5 rounded-xl shadow-lg" asChild>
           <a href="#order-form">
-            اطلب الآن — 175 دينار فقط
+            اطلب الآن — 199 دينار فقط
           </a>
         </Button>
       </div>
